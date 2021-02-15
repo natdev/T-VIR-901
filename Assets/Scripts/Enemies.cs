@@ -45,29 +45,38 @@ public class Enemies : MonoBehaviour
         if (playerInSightRange && !playerInAttackRange)
         {
             ChasePlayer();
-            animator.SetBool("Aware", true);
+            //animator.SetBool("Aware", true);
             agent.speed = chaseSpeed;
         }
         else
         {
-            animator.SetBool("Aware", false);
+            //animator.SetBool("Aware", false);
+            
             agent.speed = wanderSpeed;
         }
-        //if (playerInAttackRange && playerInSightRange) AttackPlayer();
+        if (playerInAttackRange && playerInSightRange) AttackPlayer();
     }
 
     private void Patroling()
     {
         if (!walkPointSet) SearchWalkPoint();
 
-        if (walkPointSet)
+        if (walkPointSet){
+            
+            Vector3 distanceToWalkPoint = transform.position - walkPoint;
             agent.SetDestination(walkPoint);
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        //Walkpoint reached
+            //Walkpoint reached
 
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
+            if (distanceToWalkPoint.magnitude < 1f)
+            {
+                walkPointSet = false;
+            }
+        }
+           
+
+        
+            
     }
 
     private void SearchWalkPoint()
@@ -90,7 +99,7 @@ public class Enemies : MonoBehaviour
     {
         agent.SetDestination(transform.position);
         transform.LookAt(player);
-
+        animator.SetTrigger("Attack");
         if (!alreadyAttacked)
         {
             //Attack code
